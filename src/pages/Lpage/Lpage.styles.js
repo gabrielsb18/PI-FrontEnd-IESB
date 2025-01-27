@@ -179,14 +179,6 @@ export const WrapperGrid = styled.div`
 	justify-content: flex-start;
 	max-width: 100%;
 
-    @media ${device.sm} {
-        grid-template-columns: minmax(190px, 2fr) minmax(190px, 2fr);
-        grid-template-areas: 
-        "MonthsCompletedTasks MonthsCompletedTasks"
-        "ContentText"
-        "ContentGraphicTwo" "ContentGraphicTree";
-    }
-
     @media ${device.xs} {
         grid-template-columns: minmax(190px, 2fr);
         grid-template-areas:
@@ -194,6 +186,14 @@ export const WrapperGrid = styled.div`
         "MonthsCompletedTasks"
         "ContentGraphicTwo"
         "ContentGraphicTree";
+    }
+
+    @media ${device.sm} {
+        grid-template-columns: minmax(190px, 2fr) minmax(190px, 2fr);
+        grid-template-areas: 
+        "MonthsCompletedTasks MonthsCompletedTasks"
+        "ContentText"
+        "ContentGraphicTwo" "ContentGraphicTree";
     }
 `;
 

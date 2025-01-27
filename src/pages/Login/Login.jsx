@@ -1,7 +1,7 @@
 import { ContainerBody, Title, FormContainer } from "../Login/Login.style";
 import { PanelLogo } from "../../components/PaneLogo/panelLogo";
 import { Input } from "../../components/Input/Input";
-import Button from "../../components/Button/Button";
+import { Button } from "../../components/Button/Button";
 import { toast } from "sonner";
 import { ToastPopUp } from "../../components/Toast/Toast";
 import { MdOutlineEmail, MdOutlineLock } from "react-icons/md";

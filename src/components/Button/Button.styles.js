@@ -9,6 +9,7 @@ export const ConteinerButton = styled.button`
     font-size: 20px;
     font-weight: 600;
     transition: ease-in-out 0.3s;
+    
     &:hover {
         box-shadow: -10px 5px 44.1px 0px rgba(229, 176, 78, 0.62);
     }
