@@ -1,20 +1,18 @@
 import { api } from "./api";
 
-async function getMetrics() {
-    const acessToken = localStorage.getItem("@Notes:token");
-
-    return await api.get("/notes/totals", {
+function getMetrics(credentials) {
+    return api.get("/notes/totals", {
         headers: {
-            authorization: `Bearer ${JSON.parse(acessToken)}`,
-        },
+            authorization: `Bearer ${ credentials }`
+        }
     })
         .then((response) => {
-            return response.data;
+            return { sucess: true, data: response.data };
         }).catch((error) => {
             if (error.response) {
-                return error.response.data.msg;
+                return { sucess: false, msg: error.response.data.msg }
             } else {
-                throw new Error('Erro ao buscar o total de notas');
+                return { sucess: false, msg: 'Erro ao tentar se conectar com o servidor' };
             }
         });
 }
