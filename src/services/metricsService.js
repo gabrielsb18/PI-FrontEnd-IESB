@@ -12,7 +12,7 @@ function getMetrics(credentials) {
             if (error.response) {
                 return { sucess: false, msg: error.response.data.msg }
             } else {
-                return { sucess: false, msg: 'Erro ao tentar se conectar com o servidor' };
+                return { sucess: false, msg: "Erro ao carregar metricas" };
             }
         });
 }
