@@ -9,33 +9,42 @@ function MetricsProvider({ children }) {
 
 	const [totalTasks, setTotalTasks] = useState({});
 	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
 
 	useEffect(() => {
 		if (acessToken) {
-			const getTotalPendingTasks = async () => {
-				setLoading(true);
-				try {
+			
+			const fecthTotaltasks = async () => {
+					setLoading(true);
 					const response = await getMetrics(acessToken);
-					const { pendente, concluida } = response.data;
-					setTotalTasks((prevstate) => ({
-						...prevstate,
-						pendente,
-						concluida,
-					}));
-				} catch (error) {
-					return error.message;
-				} finally {
+					
+					if (response.sucess) {
+						const { pendente, concluida } = response.data;
+					
+						setTotalTasks((prevstate) => ({
+							...prevstate,
+							pendente,
+							concluida,
+						}));
+					}
+
+					if (!response.sucess) {
+						setError(response.msg);
+					}
+				
 					setLoading(false);
 				}
+
+				fecthTotaltasks();
 			};
-			getTotalPendingTasks();
-		}
-	}, [acessToken]);
+			
+		}, [acessToken]);
 
 	const context = {
 		totalTasksPending: totalTasks.pendente,
 		totalTasksCompleted: totalTasks.concluida,
 		loading,
+		error
 	};
 
 	return (
