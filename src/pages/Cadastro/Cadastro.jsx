@@ -5,7 +5,7 @@ import {
 } from "../Cadastro/Cadastro.style";
 import { PanelLogo } from "../../components/PaneLogo/panelLogo";
 import { Input } from "../../components/Input/Input";
-import Button from "../../components/Button/Button";
+import { Button } from "../../components/Button/Button";
 import { MdOutlineEmail, MdOutlineLock } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
