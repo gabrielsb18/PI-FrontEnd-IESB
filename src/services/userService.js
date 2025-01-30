@@ -7,9 +7,9 @@ function postUser(data) {
         })
         .catch((error) => {
             if (error.response) {
-                return { sucess: false, msg: error.response.data.msg }
+                return { sucess: false, errors: error.response.data.errors }
             } else {
-                return { sucess: false, msg: "Erro ao criar nota" }
+                return { sucess: false, msg: "Erro ao criar usuario" }
             }
         })
 }

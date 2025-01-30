@@ -36,7 +36,6 @@ export const CardMetrics = styled(SkeletonLoading)`
     width: 100%;
     justify-content: space-around;
     grid-area: ${(props) => props.area};
-    border: 1px solid #979797;
     padding:20px;
     border-radius:10px;
 `;
