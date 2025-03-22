@@ -15,8 +15,7 @@ export const Main = styled.main`
 	gap: 1.75rem;
 	margin: 0 auto;
     margin-top: 4%;
-    height: 100%;
-    max-height: 100%;
+    height: 100vh;
 
     @media ${device.xs}{
         padding: 2rem;
