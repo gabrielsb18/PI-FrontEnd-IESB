@@ -17,4 +17,17 @@ function getTotalTasks(credentials) {
         });
 }
 
-export { getMetrics };
+function getTotalTasksCompletedOfWeek(){
+    return api.get("/notes/notesofweek")
+    .then((response)=>{
+        return { sucess: true, data: response.data}
+    }).catch((error)=> {
+        if(error.response){
+            return { sucess: false, msg: "Notas da semana carregadas com sucesso"}
+        } else {
+            return {sucess: false, msg: "Erro ao carregar o total de notas da semana"}
+        }
+    })
+}
+
+export { getTotalTasks,getTotalTasksCompletedOfWeek };
