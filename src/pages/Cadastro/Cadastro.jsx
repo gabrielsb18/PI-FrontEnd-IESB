@@ -29,22 +29,23 @@ export default function Cadastro() {
 	});
 
 	async function onSignup(data) {
-		try {
 			const response = await signUp(data);
+
+			if(response.sucess){
+				toast.success(response.msg, {
+					style: {
+						borderColor: "green",
+					},
+				});
+	
+				setTimeout(() => {
+					navigate("/login");
+				}, 1000);
+			}
             
-            toast.success(response.msg, {
-                style: {
-                    borderColor: "green",
-                },
-            });
-
-			setTimeout(() => {
-                navigate("/login");
-            }, 1000);
-
-		} catch (error) {
-			toast.error(error.response.data.errors);
-		}
+			if (!response.sucess) {
+				toast.error(response.msg);
+			}
 	}
 
 	return (
