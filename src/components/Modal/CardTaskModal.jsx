@@ -14,13 +14,9 @@ export function CardTaskModal ({title:initialTitle, content:initialContent, note
     async function handleRemove() {
 		try {
 			const response = await deleteNote(noteId);
-
-            if(!response.sucess){
-                toast.error(response.msg);
-            }
-
+            
             if(response.sucess){
-                toast.success(response.data.msg, {
+                toast.success("Nota deletada com sucesso", {
                     style: {
                         borderColor: "green",
                     },
@@ -28,6 +24,11 @@ export function CardTaskModal ({title:initialTitle, content:initialContent, note
                 
                 onDelete(noteId);
                 onClose();
+            }
+
+            
+            if(!response.sucess){
+                toast.error(response.msg);
             }
 
 		} catch (error) {
