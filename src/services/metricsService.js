@@ -1,6 +1,6 @@
 import { api } from "./api";
 
-function getMetrics(credentials) {
+function getTotalTasks(credentials) {
     return api.get("/notes/totals", {
         headers: {
             authorization: `Bearer ${ credentials }`
