@@ -1,7 +1,29 @@
 import { ContentGraphicsOne } from "./GrapicTasks.styles.js";
 import Chart from "../Chart/index.jsx";
+import { useEffect, useState } from "react";
+import { getTotalTasksCompletedOfWeek } from "../../../services/metricsService.js";
+import { toast } from "sonner"
+import { ToastPopUp } from "../../Toast/Toast.jsx";
 
 export function GrapicTasks() {
+	const [data, setData] = useState([0,0,0,0,0,0,0])
+
+	useEffect(()=>{
+		const fetchData = async()=> {
+			const response = await getTotalTasksCompletedOfWeek()
+			
+			if(response.sucess){
+				setData(response.data)
+			}
+
+			if(!response.sucess){
+				toast.error(response.msg)
+			}
+		} 
+
+		fetchData();
+	}, [])
+
 	const options = {
 		title: {
 			text: "",
@@ -49,7 +71,7 @@ export function GrapicTasks() {
 		series: [
 			{
 				name: "Tarefas Concluídas",
-				data: [20, 40, 20, 42, 20, 10, 12],
+				data: data,
 				fillColor: {
 					linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
 					stops: [
@@ -72,8 +94,8 @@ export function GrapicTasks() {
 
 	return (
 		<>
+		<ToastPopUp/>
 			<ContentGraphicsOne>
-				<p>Seu Desempenho</p>
 				<Chart options={options} />
 			</ContentGraphicsOne>
 		</>
