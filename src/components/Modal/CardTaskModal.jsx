@@ -79,8 +79,7 @@ export function CardTaskModal ({title:initialTitle, content:initialContent, note
 				_id: noteId,
 				titulo: title,
 				descricao: content,
-				status: "concluida",
-				usuario: userId,
+				status: "concluida"
 			};
 
 			const response = await putNote(noteId, updatedNote);
