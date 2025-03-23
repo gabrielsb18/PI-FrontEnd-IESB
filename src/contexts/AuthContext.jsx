@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
+import { loginUser, postUser } from "../services/userService";
 
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
 	const [data, setData] = useState({});
+	const [loading, setLoading] = useState(true);	
 
 	useEffect(() => {
 		const acessToken = localStorage.getItem("@Notes:token");
@@ -36,39 +38,39 @@ function AuthProvider({ children }) {
     },[data.avatar]);	
 
 	async function signIn(data) {
-		try {
-			const response = await api.post("/users/login", data);
+		const result = await loginUser(data);
 
+		if (result.success) {
 			const {
-                avatar,
-                nome,
+				avatar,
+				nome,
 				acessToken,
 				refreshToken,
 				userId,
 				email: emailUser,
-			} = response.data;
-
+			} = result.data;
+	
 			localStorage.setItem("@Notes:token", JSON.stringify(acessToken));
 			localStorage.setItem("@Notes:refreshToken", JSON.stringify(refreshToken));
-
+	
 			api.defaults.headers.common["authorization"] = `Bearer ${acessToken}`;
-
+	
 			setData({ avatar, acessToken, refreshToken, userId, emailUser, nome });
-
-			return response.data;
-		} catch (error) {
-			throw error;
+	
+			return {success: true, msg: result.data.msg};
 		}
+
+		return {sucess: false, msg: result.msg}
 	}
 
 	async function signUp(data) {
-		try {
-			const response = await api.post("/users/", data);
+		const result = await postUser(data);
 
-			return response.data;
-		} catch (error) {
-			throw error;
+		if (result.sucess) {
+			return {sucess: true, msg: result.data.msg};
 		}
+
+		return {sucess: false, msg: result.errors}
 	}
 
 	async function signOut() {
@@ -78,6 +80,7 @@ function AuthProvider({ children }) {
 	}
 
 	useEffect(() => {
+		setLoading(true);
 		const acessToken = localStorage.getItem("@Notes:token");
 		const refreshToken = localStorage.getItem("@Notes:refreshToken");
 
@@ -88,6 +91,7 @@ function AuthProvider({ children }) {
 				refreshToken: JSON.parse(refreshToken),
 			});
 		};
+		setLoading(false);
 
 	}, []);
 
@@ -103,6 +107,7 @@ function AuthProvider({ children }) {
 		acessToken: data.acessToken,
 		refreshToken: data.refreshToken,
 		userId: data.userId,
+		loading,
 	};
 
 	return (

@@ -5,7 +5,11 @@ import { AuthRoutes } from "./auth.routes";
 import Lpage from "../pages/Lpage/Lpage";
 
 export function Routes() {
-	const { acessToken } = useAuth();
+	const { acessToken, loading } = useAuth();
+
+	if(loading){
+		return null
+	}
 
 	return (
 		<BrowserRouter>

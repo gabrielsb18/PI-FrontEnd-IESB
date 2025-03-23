@@ -25,20 +25,22 @@ export default function Login() {
 	});
 
 	async function onSubmit(data) {
-		try {
-			const response = await signIn(data);
-			
-            setTimeout(() => {
+		const response = await signIn(data);
+
+		if (response.success) {
+			setTimeout(() => {
 				toast.success(response.msg, {
 					style: {
 						borderColor: "green",
 					},
 				});
 			}, 1000);
-            
+
 			navigate("/Home");
-		} catch (error) {
-			toast.error(error.response.data.msg);
+		}
+
+		if (!response.success) {
+			toast.error(response.msg);
 		}
 	}
 

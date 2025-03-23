@@ -1,6 +1,6 @@
 import { api } from "./api";
 
-function getMetrics(credentials) {
+function getTotalTasks(credentials) {
     return api.get("/notes/totals", {
         headers: {
             authorization: `Bearer ${ credentials }`
@@ -17,4 +17,17 @@ function getMetrics(credentials) {
         });
 }
 
-export { getMetrics };
+function getTotalTasksCompletedOfWeek(){
+    return api.get("/notes/notesofweek")
+    .then((response)=>{
+        return { sucess: true, data: response.data}
+    }).catch((error)=> {
+        if(error.response){
+            return { sucess: false, msg: "Notas da semana carregadas com sucesso"}
+        } else {
+            return {sucess: false, msg: "Erro ao carregar o total de notas da semana"}
+        }
+    })
+}
+
+export { getTotalTasks,getTotalTasksCompletedOfWeek };

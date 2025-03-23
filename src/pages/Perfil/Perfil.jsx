@@ -39,7 +39,10 @@ export default function Perfil() {
     });
 
     useEffect(() => {
-        const avatarUrl = avatar ? avatar : placeholderImageUser;
+        const avatarUrl = avatar
+			? `https://exabtckwfhcgphkfxxva.supabase.co/storage/v1/object/public/avatars-notes/${avatar}`
+			: placeholderImageUser;
+
         setAvatarUser(avatarUrl);
     }, [avatar]);
 

@@ -1,5 +1,5 @@
 import { useContext, createContext, useEffect, useState } from "react";
-import { getMetrics } from "../services/metricsService";
+import { getTotalTasks } from "../services/metricsService";
 import { useAuth } from "./AuthContext";
 
 export const MetricsContext = createContext({});
@@ -16,7 +16,7 @@ function MetricsProvider({ children }) {
 			
 			const fecthTotaltasks = async () => {
 					setLoading(true);
-					const response = await getMetrics(acessToken);
+					const response = await getTotalTasks(acessToken);
 					
 					if (response.sucess) {
 						const { pendente, concluida } = response.data;
