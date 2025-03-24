@@ -24,8 +24,8 @@ export function GrapicTasks() {
 		fetchData();
 	}, [])
 
-	const categories = data.map(item => item.dia).reverse();
-    const values = data.map(item => item.total).reverse();
+	const days = data.map(item => item.dia);
+    const totalTasksCompleted = data.map(item => item.total);
 
 	const options = {
 		title: {
@@ -54,7 +54,7 @@ export function GrapicTasks() {
 		tooltip: {
 			useHTML: true,
 			formatter: function () {
-				const titles = categories;
+				const titles = days;
 
 				return `
 				<b>${titles[this.point.index]}</b><br>
@@ -66,7 +66,7 @@ export function GrapicTasks() {
 		series: [
 			{
 				name: "Tarefas Concluídas",
-				data: values,
+				data: totalTasksCompleted,
 				fillColor: {
 					linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
 					stops: [
