@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { HeaderNav } from "../../components/Header/Header";
-import { GrapicTasks } from "../../components/Metrics/GrapicTasks/GrapicTasks";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { Footer } from "../../components/Footer/Footer";
 import { SelectButton } from "../../components/Select/Select";
@@ -22,6 +21,7 @@ import {
 	WrapperContent,
 	Main,
 } from "./Lpage.styles";
+import { MockGrapicMetrics } from "./MockGrapic";
 
 export default function Lgpage() {
 	const navigate = useNavigate();
@@ -60,7 +60,7 @@ export default function Lgpage() {
 
 				<MetricsSection>
 					<WrapperGrid>
-						<GrapicTasks />
+						<MockGrapicMetrics />
 						<ContentText>
 							<h1>Acompanhe seu desempenho</h1>
 						</ContentText>
