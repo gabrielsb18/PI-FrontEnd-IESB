@@ -1,12 +1,14 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
 import { loginUser, postUser } from "../services/userService";
+import { supabase } from "../clients/SupabaseClient";
 
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
 	const [data, setData] = useState({});
-	const [loading, setLoading] = useState(true);	
+	const [loading, setLoading] = useState(true);
+	const [session, setSession] = useState(null)
 
 	useEffect(() => {
 		const acessToken = localStorage.getItem("@Notes:token");
@@ -95,6 +97,29 @@ function AuthProvider({ children }) {
 
 	}, []);
 
+	useEffect(() => {
+		supabase.auth.getSession().then(({ data: session }) => {
+			setSession(session);
+		});
+
+		const {
+			data: { subscription },
+		} = supabase.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+		});
+
+		return () => subscription.unsubscribe();
+	}, []);
+
+	console.log(session)
+
+
+	async function signInWithGoogle() {
+		await supabase.auth.signInWithOAuth({
+			provider: "google",
+		});
+	};
+
 	const contexto = {
 		signIn,
 		signUp,
@@ -108,6 +133,8 @@ function AuthProvider({ children }) {
 		refreshToken: data.refreshToken,
 		userId: data.userId,
 		loading,
+
+		signInWithGoogle,
 	};
 
 	return (
