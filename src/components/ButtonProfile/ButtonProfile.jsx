@@ -6,15 +6,10 @@ import {
 	ProfileImage,
 } from "./ButtonProfile.style";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
-import placeholderImageUser from "/placeHolder.webp";
 import { useAuth } from "../../contexts/AuthContext";
 
 export function ButtonProfile() {
-	const { nome, emailUser, avatar } = useAuth();
-
-	const avatarUrl = avatar
-		? `https://exabtckwfhcgphkfxxva.supabase.co/storage/v1/object/public/avatars-notes/${avatar}`
-		: placeholderImageUser;
+	const { nome, emailUser, avatarUrl } = useAuth();
 
 	return (
 		<ContainerProfile>

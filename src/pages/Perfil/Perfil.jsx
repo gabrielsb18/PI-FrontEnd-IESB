@@ -3,7 +3,6 @@ import { Input } from "../../components/Input/Input.jsx";
 import { MdOutlineEmail, MdOutlineLock } from "react-icons/md";
 import { FiCamera, FiUser } from "react-icons/fi";
 import { ToastPopUp } from "../../components/Toast/Toast.jsx"
-import placeholderImageUser from "/placeHolder.webp"
 
 import {
 	ContainerBody,
@@ -24,11 +23,15 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Perfil() {
-    const { nome, emailUser, avatar, setData} = useAuth();
+    const { nome, emailUser, avatarUrl, setData} = useAuth();
     const { id } = useParams();
 
-    const [avatarUser, setAvatarUser] = useState(null);
     const [avatarFile, setAvatarFile] = useState(null);
+    const [avatarPreview, setAvatarPreview] = useState(avatarUrl);
+
+    useEffect(() => {
+        setAvatarPreview(avatarUrl);
+    }, [avatarUrl]);
 
     const {register, handleSubmit, formState: {errors}} = useForm({
         values: {
@@ -37,14 +40,6 @@ export default function Perfil() {
         },
         resolver: zodResolver(updateUserSchema)
     });
-
-    useEffect(() => {
-        const avatarUrl = avatar
-			? `https://exabtckwfhcgphkfxxva.supabase.co/storage/v1/object/public/avatars-notes/${avatar}`
-			: placeholderImageUser;
-
-        setAvatarUser(avatarUrl);
-    }, [avatar]);
 
     const onUpdate = async (data) => {
         try {
@@ -66,7 +61,7 @@ export default function Perfil() {
                     },
                 });
 
-                setData((prevstate) => ({...prevstate, avatar: response.data.avatar}));
+                setData((prevstate) => ({...prevstate, avatar: response.data.user.avatar}));
             }
             
             if(data.nome !== nome || data.email !== emailUser || data.senha || data.senha_antiga){
@@ -98,7 +93,7 @@ export default function Perfil() {
             setAvatarFile(file);
     
             const imagePreview = URL.createObjectURL(file);
-            setAvatarUser(imagePreview);
+            setAvatarPreview(imagePreview);
         };
     };
 
@@ -109,7 +104,7 @@ export default function Perfil() {
             />
 			<Main>
                 <Avatar>
-                    <img src={avatarUser} alt="Profile Image" />
+                    <img src={avatarPreview} alt="Profile Image" />
 
 
                     <label htmlFor="avatar">
