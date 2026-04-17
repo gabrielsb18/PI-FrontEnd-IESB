@@ -42,4 +42,18 @@ function getUser() {
         });
 }
 
-export {postUser, loginUser, getUser};
+function getAvatar(filename) {
+    return api.get(`/users/avatar/${filename}`, { responseType: 'blob' })
+        .then((response) => {
+            return { success: true, data: response.data };
+        })
+        .catch((error) => {
+            if (error.response) {
+                return { success: false, msg: "Erro ao buscar avatar" };
+            } else {
+                return { success: false, msg: "Erro na requisição do avatar" };
+            }
+        });
+}
+
+export {postUser, loginUser, getUser, getAvatar};

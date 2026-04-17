@@ -90,6 +90,7 @@ export const ContainerCardsTasks = styled.div`
 	grid-template-areas: "Task Task Task Task";
 	gap: 1.25rem;
 	width: 100%;
+    margin-bottom: 6%;
 
 	@media ${device.lg} {
 		grid-template-areas:

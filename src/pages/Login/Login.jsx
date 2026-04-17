@@ -11,9 +11,10 @@ import { loginUserSchema } from "../../utils/loginUserSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../contexts/AuthContext";
+import { supabase } from "../../clients/SupabaseClient";
 
 export default function Login() {
-	const { signIn } = useAuth();
+	const { signIn, signInWithGoogle } = useAuth();
 	const navigate = useNavigate();
 
 	const {
@@ -82,6 +83,7 @@ export default function Login() {
 					</div>
 				</form>
 			</FormContainer>
+			<button onClick={signInWithGoogle}>Entre com o Google</button>
 
 			<PanelLogo />
 			<ToastPopUp />

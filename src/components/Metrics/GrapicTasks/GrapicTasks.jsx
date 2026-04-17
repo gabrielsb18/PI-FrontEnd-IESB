@@ -24,6 +24,9 @@ export function GrapicTasks() {
 		fetchData();
 	}, [])
 
+	const days = data.map(item => item.dia);
+    const totalTasksCompleted = data.map(item => item.total);
+
 	const options = {
 		title: {
 			text: "",
@@ -51,15 +54,7 @@ export function GrapicTasks() {
 		tooltip: {
 			useHTML: true,
 			formatter: function () {
-				const titles = [
-					"Domingo",
-					"Segunda-feira",
-					"Terça-feira",
-					"Quarta-feira",
-					"Quinta-feira",
-					"Sexta-feira",
-					"Sábado",
-				];
+				const titles = days;
 
 				return `
 				<b>${titles[this.point.index]}</b><br>
@@ -71,7 +66,7 @@ export function GrapicTasks() {
 		series: [
 			{
 				name: "Tarefas Concluídas",
-				data: data,
+				data: totalTasksCompleted,
 				fillColor: {
 					linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
 					stops: [

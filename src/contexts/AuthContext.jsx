@@ -1,12 +1,16 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
-import { loginUser, postUser } from "../services/userService";
+import { loginUser, postUser, getAvatar } from "../services/userService";
+import { supabase } from "../clients/SupabaseClient";
+import placeholderImageUser from "/placeHolder.webp";
 
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
 	const [data, setData] = useState({});
-	const [loading, setLoading] = useState(true);	
+	const [loading, setLoading] = useState(true);
+	const [session, setSession] = useState(null)
+	const [avatarUrl, setAvatarUrl] = useState(placeholderImageUser);
 
 	useEffect(() => {
 		const acessToken = localStorage.getItem("@Notes:token");
@@ -35,7 +39,33 @@ function AuthProvider({ children }) {
             fetchUserData();
         } ;
 
-    },[data.avatar]);	
+    },[data.avatar]);
+
+	useEffect(() => {
+		let objectUrl;
+
+		const fetchAvatar = async (filename) => {
+			const result = await getAvatar(filename);
+			if (result.success) {
+				objectUrl = URL.createObjectURL(result.data);
+				setAvatarUrl(objectUrl);
+			} else {
+				setAvatarUrl(placeholderImageUser);
+			}
+		};
+
+		if (data.avatar) {
+			fetchAvatar(data.avatar);
+		} else {
+			setAvatarUrl(placeholderImageUser);
+		}
+
+		return () => {
+			if (objectUrl) {
+				URL.revokeObjectURL(objectUrl);
+			}
+		};
+	}, [data.avatar]);
 
 	async function signIn(data) {
 		const result = await loginUser(data);
@@ -95,19 +125,44 @@ function AuthProvider({ children }) {
 
 	}, []);
 
+	useEffect(() => {
+		supabase.auth.getSession().then(({ data: session }) => {
+			setSession(session);
+		});
+
+		const {
+			data: { subscription },
+		} = supabase.auth.onAuthStateChange((_event, session) => {
+			setSession(session);
+		});
+
+		return () => subscription.unsubscribe();
+	}, []);
+
+	console.log(session)
+
+
+	async function signInWithGoogle() {
+		await supabase.auth.signInWithOAuth({
+			provider: "google",
+		});
+	};
+
 	const contexto = {
 		signIn,
 		signUp,
 		signOut,
         data,
 		setData,
-        avatar: data.avatar,
+        avatarUrl,
         nome: data.nome, 
 		emailUser: data.emailUser,
 		acessToken: data.acessToken,
 		refreshToken: data.refreshToken,
 		userId: data.userId,
 		loading,
+
+		signInWithGoogle,
 	};
 
 	return (
