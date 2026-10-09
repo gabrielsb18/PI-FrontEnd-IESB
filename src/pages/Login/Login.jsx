@@ -1,17 +1,17 @@
-import { ContainerBody, Title, FormContainer } from "../Login/Login.style";
-import { PanelLogo } from "../../components/PaneLogo/panelLogo";
-import { Input } from "../../components/Input/Input";
-import { Button } from "../../components/Button/Button";
-import { toast } from "sonner";
-import { ToastPopUp } from "../../components/Toast/Toast";
 import { MdOutlineEmail, MdOutlineLock } from "react-icons/md";
+import { toast } from "sonner";
+import { Button } from "../../components/Button/Button";
+import { GoogleButton } from "../../components/GoogleButton/GoogleButton";
+import { Input } from "../../components/Input/Input";
+import { PanelLogo } from "../../components/PaneLogo/panelLogo";
+import { ToastPopUp } from "../../components/Toast/Toast";
+import { ContainerBody, FormContainer, Title } from "../Login/Login.style";
 
-import { useNavigate } from "react-router-dom";
-import { loginUserSchema } from "../../utils/loginUserSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { supabase } from "../../clients/SupabaseClient";
+import { loginUserSchema } from "../../utils/loginUserSchema";
 
 export default function Login() {
 	const { signIn, signInWithGoogle } = useAuth();
@@ -80,10 +80,10 @@ export default function Login() {
 							name="Cadastre-se"
 							onClick={() => navigate("/cadastro")}
 						/>
+						<GoogleButton onClick={signInWithGoogle} />
 					</div>
 				</form>
 			</FormContainer>
-			<button onClick={signInWithGoogle}>Entre com o Google</button>
 
 			<PanelLogo />
 			<ToastPopUp />
