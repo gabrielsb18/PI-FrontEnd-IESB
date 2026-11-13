@@ -21,3 +21,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Gemini Files
+GEMINI.md
+.geminiignore

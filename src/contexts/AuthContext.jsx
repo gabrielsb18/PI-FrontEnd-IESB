@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { api } from "../services/api";
-import { loginUser, postUser, getAvatar } from "../services/userService";
+import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../clients/SupabaseClient";
+import { api } from "../services/api";
+import { getAvatar, loginGoogleOAuth, loginUser, postUser } from "../services/userService";
 import placeholderImageUser from "/placeHolder.webp";
 
 export const AuthContext = createContext({});
@@ -55,7 +55,11 @@ function AuthProvider({ children }) {
 		};
 
 		if (data.avatar) {
-			fetchAvatar(data.avatar);
+			if (data.avatar.startsWith('http://') || data.avatar.startsWith('https://')) {
+				setAvatarUrl(data.avatar);
+			} else {
+				fetchAvatar(data.avatar);
+			}
 		} else {
 			setAvatarUrl(placeholderImageUser);
 		}
@@ -106,6 +110,7 @@ function AuthProvider({ children }) {
 	async function signOut() {
 		localStorage.removeItem("@Notes:token");
 		localStorage.removeItem("@Notes:refreshToken");
+		localStorage.removeItem("sb-fcxnupsimeujwnejaiop-auth-token")
 		setData({});
 	}
 
@@ -139,8 +144,38 @@ function AuthProvider({ children }) {
 		return () => subscription.unsubscribe();
 	}, []);
 
-	console.log(session)
-
+	useEffect(() => {
+		async function handleGoogleOAuth() {
+			if (session && session.access_token) {
+				const localToken = localStorage.getItem("@Notes:token");
+				if (!localToken) {
+					try {
+						const result = await loginGoogleOAuth(session.access_token);
+						if (result.success) {
+							const {
+								avatar,
+								nome,
+								acessToken,
+								refreshToken,
+								userId,
+								email: emailUser,
+							} = result.data;
+					
+							localStorage.setItem("@Notes:token", JSON.stringify(acessToken));
+							localStorage.setItem("@Notes:refreshToken", JSON.stringify(refreshToken));
+					
+							api.defaults.headers.common["authorization"] = `Bearer ${acessToken}`;
+					
+							setData(prevstate => ({ ...prevstate, avatar, acessToken, refreshToken, userId, emailUser, nome }));
+						}
+					} catch (error) {
+						console.error("Erro ao fazer login com o Google (Backend)", error);
+					}
+				}
+			}
+		}
+		handleGoogleOAuth();
+	}, [session]);
 
 	async function signInWithGoogle() {
 		await supabase.auth.signInWithOAuth({

@@ -28,6 +28,20 @@ function loginUser(data) {
         });
 }
 
+function loginGoogleOAuth(token) {
+    return api.post("/users/oauth/google", { access_token: token })
+        .then((response) => {
+            return { success: true, data: response.data };
+        })
+        .catch((error) => {
+            if (error.response) {
+                return { success: false, msg: error.response.data.msg };
+            } else {
+                return { success: false, msg: "Erro ao realizar login com Google" };
+            }
+        });
+}
+
 function getUser() {
     return api.get("/users")
         .then((response) => {
@@ -56,4 +70,4 @@ function getAvatar(filename) {
         });
 }
 
-export {postUser, loginUser, getUser, getAvatar};
+export {postUser, loginUser, loginGoogleOAuth, getUser, getAvatar};
