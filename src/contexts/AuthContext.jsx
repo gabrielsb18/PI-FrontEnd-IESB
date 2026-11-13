@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { api } from "../services/api";
-import { loginUser, postUser, getAvatar, loginGoogleOAuth } from "../services/userService";
+import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../clients/SupabaseClient";
+import { api } from "../services/api";
+import { getAvatar, loginGoogleOAuth, loginUser, postUser } from "../services/userService";
 import placeholderImageUser from "/placeHolder.webp";
 
 export const AuthContext = createContext({});
@@ -110,6 +110,7 @@ function AuthProvider({ children }) {
 	async function signOut() {
 		localStorage.removeItem("@Notes:token");
 		localStorage.removeItem("@Notes:refreshToken");
+		localStorage.removeItem("sb-fcxnupsimeujwnejaiop-auth-token")
 		setData({});
 	}
 
